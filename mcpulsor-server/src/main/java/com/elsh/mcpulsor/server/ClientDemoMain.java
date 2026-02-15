@@ -13,6 +13,11 @@ public class ClientDemoMain {
                 .endpoint("/mcpulsor")
                 .build();
 
+        // Example STDIO transport
+//        ServerParameters serverParams = ServerParameters.builder("java").args("-jar /app/app.jar").build();
+//        StdioClientTransport stdioTransport = new StdioClientTransport(serverParams, new JacksonMcpJsonMapper(new ObjectMapper()));
+//        McpSyncClient client = McpClient.sync(stdioTransport).build();
+
         McpSyncClient client = McpClient.sync(clientTransport).build();
 
         client.initialize();
