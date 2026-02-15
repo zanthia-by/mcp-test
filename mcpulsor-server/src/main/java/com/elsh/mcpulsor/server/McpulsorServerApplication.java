@@ -5,7 +5,7 @@ import io.modelcontextprotocol.json.jackson.JacksonMcpJsonMapper;
 import io.modelcontextprotocol.server.McpServer;
 import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.server.McpSyncServer;
-import io.modelcontextprotocol.server.transport.HttpServletStreamableServerTransportProvider;
+import io.modelcontextprotocol.server.transport.StdioServerTransportProvider;
 import io.modelcontextprotocol.spec.McpSchema;
 import lombok.SneakyThrows;
 import org.eclipse.jetty.server.Server;
@@ -17,9 +17,8 @@ public class McpulsorServerApplication {
     public static void main(String[] args) {
         System.out.println("Server Application Started");
 
-        HttpServletStreamableServerTransportProvider transportProvider = HttpServletStreamableServerTransportProvider.builder()
-                .mcpEndpoint("/mcpulsor")
-                .build();
+        StdioServerTransportProvider transportProvider =
+                new StdioServerTransportProvider(new JacksonMcpJsonMapper(new ObjectMapper()));
 
         McpSchema.Tool bioSensorTool = McpSchema.Tool.builder()
                 .name("bioSensor")
@@ -40,16 +39,16 @@ public class McpulsorServerApplication {
                 .tools(bioSensorToolSpec)
                 .build();
 
-        Server server = new Server(8091);
-
-        ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        contextHandler.setContextPath("/");
-        contextHandler.addServlet(new ServletHolder(transportProvider), "/*");
-
-        server.setHandler(contextHandler);
-
-        server.start();
-        server.join();
+//        Server server = new Server(8091);
+//
+//        ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+//        contextHandler.setContextPath("/");
+//        contextHandler.addServlet(new ServletHolder(transportProvider), "/*");
+//
+//        server.setHandler(contextHandler);
+//
+//        server.start();
+//        server.join();
     }
 
     private static String createBioSensorSchema() {
