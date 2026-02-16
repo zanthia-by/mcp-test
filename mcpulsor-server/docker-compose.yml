@@ -50,3 +50,28 @@ services:
     ports:
       - "6274:6274"                # Inspector UI (http)
       - "6277:6277"                # Inspector proxy (http)
+
+
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./ollama:/root/.ollama
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: 1
+#              capabilities: [gpu]
+    entrypoint: >
+      /bin/sh -c "
+        ollama serve &
+        sleep 2 &&
+        ollama pull gemma3:4b-it-q4_K_M &&
+        ollama pull PetrosStav/gemma3-tools:4b
+        wait
+      "
+    restart: unless-stopped
