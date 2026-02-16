@@ -1,10 +1,12 @@
 package com.elsh.mcpulsorhost;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.modelcontextprotocol.spec.McpSchema;
 import lombok.SneakyThrows;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,8 +29,13 @@ public class CallToolUtil {
         String toolCallRequestJson = matcher.group(1).trim();
         JsonNode tool = mapper.readTree(toolCallRequestJson);
         String toolName = tool.path("name").asText();
+        JsonNode parameters = tool.path("parameters"); // "parameters" - see system prompt for format
+        Map<String, Object> args = mapper.convertValue(parameters, new TypeReference<>() {});
 
-        return McpSchema.CallToolRequest.builder().name(toolName).build();
+        return McpSchema.CallToolRequest.builder()
+                .name(toolName)
+                .arguments(args)
+                .build();
     }
 
     public static String wrapResponse(String toolResult) {

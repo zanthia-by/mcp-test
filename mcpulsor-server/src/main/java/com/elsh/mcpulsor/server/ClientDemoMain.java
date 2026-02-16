@@ -5,6 +5,8 @@ import io.modelcontextprotocol.client.McpSyncClient;
 import io.modelcontextprotocol.client.transport.HttpClientStreamableHttpTransport;
 import io.modelcontextprotocol.spec.McpSchema;
 
+import java.util.Map;
+
 public class ClientDemoMain {
 
     public static void main(String[] args) {
@@ -24,7 +26,11 @@ public class ClientDemoMain {
         client.listTools()
                 .tools()
                 .forEach(System.out::println);
-        client.callTool(McpSchema.CallToolRequest.builder().name("bioSensor").build())
+        client.callTool(McpSchema.CallToolRequest
+                        .builder()
+                        .name("bioSensor")
+                        .arguments(Map.of("days", 365))
+                        .build())
                 .content()
                 .forEach(System.out::println);
 

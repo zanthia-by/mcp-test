@@ -24,9 +24,9 @@ public class McpulsorHostApplication {
 
     public static void main(String[] args) {
 
-        String firstQuestion = "какой у меня пульс?";
+        String firstQuestion = "какой у меня пульс за последние 6 дней?";
         String secondQuestion = "как дела?";
-        String thirdQuestion = "какой у меня будет пульс если к нему прибавить 1000?";
+        String thirdQuestion = "какой у меня будет пульс за последние 10 дней если к нему прибавить 1000?";
         Host host = SpringApplication.run(McpulsorHostApplication.class, args).getBean(Host.class);
         host.printAnswerToUser(firstQuestion);
         host.printAnswerToUser(secondQuestion);
