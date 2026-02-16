@@ -30,7 +30,7 @@ public class CallToolUtil {
         JsonNode tool = mapper.readTree(toolCallRequestJson);
         String toolName = tool.path("name").asText();
         JsonNode parameters = tool.path("parameters"); // "parameters" - see system prompt for format
-        Map<String, Object> args = mapper.convertValue(parameters, new TypeReference<>() {});
+        Map<String, Object> args = mapper.convertValue(parameters, Map.class);
 
         return McpSchema.CallToolRequest.builder()
                 .name(toolName)

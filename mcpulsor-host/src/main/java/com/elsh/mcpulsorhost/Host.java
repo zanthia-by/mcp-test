@@ -28,13 +28,19 @@ public class Host {
                 .builder("http://localhost:8091")
                 .endpoint("/mcpulsor")
                 .build();
-        client = McpClient.sync(transport).build();
+        client = McpClient
+                .sync(transport)
+                .loggingConsumer(loggingMessageNotification ->
+                        System.out.println("\nКлиент говорит: я получил послание от сервера - " + loggingMessageNotification.data()))
+                .build();
         client.initialize();
         McpSchema.ListToolsResult toolsResult = client.listTools();
         systemPrompt = SystemPromptFactory.withTools(toolsResult);
     }
 
     public void printAnswerToUser(String question) {
+        System.out.println("Хост говорит: пользователь задал вот такой вопрос: " + question);
+
         AssistantMessage assistantMessage = chatClient
                 .prompt()
                 .system(systemPrompt)
@@ -45,9 +51,10 @@ public class Host {
                 .getOutput();
 
         if (CallToolUtil.isToolRequired(assistantMessage.getText())) {
+            System.out.println("\nХост говорит: модель просит чего-то сделать: " + assistantMessage.getText());
             McpSchema.CallToolRequest callToolRequest = CallToolUtil.getRequiredTool(assistantMessage.getText());
             String toolResponse = CallToolUtil.wrapResponse(client.callTool(callToolRequest).content().getFirst().toString());
-
+            System.out.println("\nХост говорит: вот что принес клиент от сервера по просьбе модели: " + toolResponse);
             UserMessage userMessage = new UserMessage(question);
             UserMessage toolMessage = new UserMessage(toolResponse);
 

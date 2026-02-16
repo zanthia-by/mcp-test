@@ -36,6 +36,12 @@ public class McpulsorServerApplication {
         McpServerFeatures.SyncToolSpecification bioSensorToolSpec = McpServerFeatures.SyncToolSpecification.builder()
                 .tool(bioSensorTool)
                 .callHandler((mcpSyncServerExchange, callToolRequest) -> {
+                    String serverMessage = "я тут получил вот такой запрос на вызов тула: " + callToolRequest.toString();
+                    System.out.println("СЕРВЕР говорит: " + serverMessage);
+                    mcpSyncServerExchange.loggingNotification(McpSchema.LoggingMessageNotification.builder()
+                            .data(serverMessage)
+                            .build());
+
                     int days = (int) callToolRequest.arguments().get("days");
                     return calculateResult(days);
                 })
@@ -64,7 +70,9 @@ public class McpulsorServerApplication {
         properties.put("pulse", "твой пульс " + 42 + days);
         properties.put("state", "тебе кабзда");
         properties.put("sleepDeprivation", true);
-        return McpSchema.CallToolResult.builder().structuredContent(properties).build();
+        McpSchema.CallToolResult toolResult = McpSchema.CallToolResult.builder().structuredContent(properties).build();
+        System.out.println("СЕРВЕР говорит: вот что я верну своему клиенту " + toolResult);
+        return toolResult;
     }
 
     private static String createBioSensorOutputSchema() {

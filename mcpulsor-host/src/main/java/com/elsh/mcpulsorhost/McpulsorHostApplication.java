@@ -24,13 +24,14 @@ public class McpulsorHostApplication {
 
     public static void main(String[] args) {
 
-        String firstQuestion = "какой у меня пульс за последние 6 дней?";
-        String secondQuestion = "как дела?";
-        String thirdQuestion = "какой у меня будет пульс за последние 10 дней если к нему прибавить 1000?";
+        String firstQuestion = "какой у меня пульс за сегодняшний день? Я буду жить?";
+        String secondQuestion = "как я себя чувствую?";
+        String thirdQuestion = "учитывая мое здоровье за последние 5 дней, бежать ли мне марафон?";
         Host host = SpringApplication.run(McpulsorHostApplication.class, args).getBean(Host.class);
         host.printAnswerToUser(firstQuestion);
-        host.printAnswerToUser(secondQuestion);
-        host.printAnswerToUser(thirdQuestion);
+//        host.printAnswerToUser("как дела?");
+//        host.printAnswerToUser(secondQuestion);
+//        host.printAnswerToUser(thirdQuestion);
 
     }
 
